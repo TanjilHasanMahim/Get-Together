@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!doctype html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+        <title>Get-Together — Secret Test</title>
+        <meta name="description"
+            content="Mobile-first invite for a casual get-together — RSVP saved locally, schedule, gallery and map." />
+        <style>
+            /* ===== Base / Reset ===== */
+            :root {
+                --bg: #0f1724;
+                --card: #0b1220;
+                --muted: #94a3b8;
+                --accent: #ff7a59;
+                --accent-2: #ffd166;
+                --glass: rgba(255, 255, 255, 0.03);
+                --radius: 14px;
+                --gap: 14px;
+                --max-width: 980px;
+                color-scheme: dark;
+                font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            }
+
+            * {
+                box-sizing: border-box
+            }
+
+            html,
+            body {
+                height: 100%;
+                margin: 0;
+                background: linear-gradient(180deg, #06111a 0%, #071726 100%);
+                color: #fff;
+                -webkit-font-smoothing: antialiased
+            }
+
+            a {
+                color: inherit
+            }
+
+            .container {
+                max-width: var(--max-width);
+                margin: 0 auto;
+                padding: 18px
+            }
+
+            /* ===== Header ===== */
+            header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px
+            }
+
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 12px
+            }
+
+            .logo {
+                width: 56px;
+                height: 56px;
+                border-radius: 12px;
+                background: linear-gradient(135deg, var(--accent), #ff6b6b);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 800;
+                color: #08101a
+            }
+
+            .title {
+                font-weight: 800;
+                font-size: 18px
+            }
+
+            nav.desktop {
+                display: flex;
+                gap: 10px;
+                align-items: center
+            }
+
+            .btn {
+                background: linear-gradient(90deg, var(--accent), var(--accent-2));
+                color: #08101a;
+                padding: 10px 14px;
+                border-radius: 12px;
+                font-weight: 700;
+                border: 0
+            }
+
+            .ghost {
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                padding: 8px 12px;
+                border-radius: 10px;
+                color: var(--muted)
+            }
+
+            /* Mobile hamburger */
+            .menu-mobile {
+                display: none
+            }
+
+            .hamburger {
+                width: 34px;
+                height: 28px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between
+            }
+
+            .hamburger span {
+                display: block;
+                height: 3px;
+                background: #cbd5e1;
+                border-radius: 3px
+            }
+
+            /* ===== Hero ===== */
+            .hero {
+                margin-top: 14px;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+                padding: 18px;
+                border-radius: 16px;
+                backdrop-filter: blur(6px)
+            }
+
+            .hero h1 {
+                margin: 0;
+                font-size: 22px
+            }
+
+            .hero p {
+                margin: 8px 0;
+                color: var(--muted)
+            }
+
+            /* ===== Grid / Layout ===== */
+            .grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 12px
+            }
+
+            .card {
+                background: var(--card);
+                padding: 14px;
+                border-radius: 12px
+            }
+
+            h3 {
+                margin: 0 0 8px 0
+            }
+
+            .muted {
+                color: var(--muted);
+                font-size: 14px
+            }
+
+            /* ===== Timeline Schedule ===== */
+            .timeline {
+                display: flex;
+                flex-direction: column;
+                gap: 12px
+            }
+
+            .tick {
+                display: flex;
+                gap: 12px;
+                align-items: flex-start
+            }
+
+            .dot {
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, var(--accent), var(--accent-2));
+                flex: 0 0 14px;
+                margin-top: 6px
+            }
+
+            .time {
+                min-width: 84px;
+                padding: 8px 10px;
+                background: var(--glass);
+                border-radius: 10px;
+                text-align: center;
+                font-weight: 700
+            }
+
+            .event {
+                flex: 1
+            }
+
+            .event h4 {
+                margin: 0 0 6px 0
+            }
+
+            /* ===== Gallery ===== */
+            .gallery {
+                display: flex;
+                gap: 8px;
+                overflow-x: auto;
+                padding-bottom: 8px
+            }
+
+            .gallery img {
+                height: 120px;
+                border-radius: 8px;
+                flex: 0 0 auto;
+                object-fit: cover
+            }
+
+            /* ===== Map Card ===== */
+            .map-wrap {
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, 0.03)
+            }
+
+            .map-actions {
+                display: flex;
+                gap: 8px;
+                margin-top: 8px
+            }
+
+            /* ===== RSVP Form ===== */
+            form {
+                display: grid;
+                gap: 10px
+            }
+
+            input,
+            textarea,
+            select {
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                padding: 12px;
+                border-radius: 10px;
+                color: #fff;
+                font-size: 15px
+            }
+
+            .row {
+                display: flex;
+                gap: 8px
+            }
+
+            /* ===== Small Utilities ===== */
+            .small {
+                font-size: 13px;
+                color: var(--muted)
+            }
+
+            .divider {
+                height: 1px;
+                background: rgba(255, 255, 255, 0.03);
+                margin: 10px 0
+            }
+
+            .fab {
+                position: fixed;
+                right: 16px;
+                bottom: 16px
+            }
+
+            /* ===== Responsive ===== */
+            @media(min-width:780px) {
+                .grid {
+                    grid-template-columns: 1fr 360px
+                }
+
+                nav.desktop {
+                    display: flex
+                }
+
+                .menu-mobile {
+                    display: none
+                }
+
+                .hero h1 {
+                    font-size: 28px
+                }
+            }
+
+            @media(max-width:779px) {
+                nav.desktop {
+                    display: none
+                }
+
+                .menu-mobile {
+                    display: flex
+                }
+            }
+
+            /* ===== Micro animations & accessibility ===== */
+            .fade-up {
+                transform: translateY(8px);
+                opacity: 0;
+                animation: fadeUp .45s ease forwards
+            }
+
+            @keyframes fadeUp {
+                to {
+                    transform: none;
+                    opacity: 1
+                }
+            }
+
+            :focus {
+                outline: 3px solid rgba(255, 123, 90, 0.14);
+                outline-offset: 3px
+            }
+
+            /* ===== Toast ===== */
+            .toast {
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 24px;
+                background: rgba(10, 10, 10, 0.9);
+                padding: 10px 14px;
+                border-radius: 10px;
+                display: none
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <header class="fade-up">
+                <div class="brand">
+                    <div class="logo">GT</div>
+                    <div>
+                        <div class="title">Get-Together — Secret Test</div>
+                        <div class="small">Friends • Fun • Memories</div>
+                    </div>
+                </div>
+
+                <nav class="desktop" aria-label="Main navigation">
+                    <a class="small" href="#about">About</a>
+                    <a class="small" href="#schedule">Schedule</a>
+                    <a class="small" href="#rsvp">RSVP</a>
+                    <a class="btn" href="#rsvp">Join</a>
+                </nav>
+
+                <div class="menu-mobile">
+                    <button id="mobileNavToggle" class="ghost" aria-expanded="false" aria-controls="mobileMenu">
+                        <div class="hamburger"><span></span><span></span><span></span></div>
+                    </button>
+                </div>
+            </header>
+
+            <div id="mobileMenu" style="display:none;margin-top:12px">
+                <div class="card">
+                    <a href="#about">About</a><br>
+                    <a href="#schedule">Schedule</a><br>
+                    <a href="#rsvp">RSVP</a><br>
+                    <a href="#gallery">Gallery</a>
+                </div>
+            </div>
+
+            <main>
+                <section id="about" class="hero card fade-up">
+                    <h1>You're invited — Get-Together at <span style="color:var(--accent)">Secret Test</span>!</h1>
+                    <p class="muted">A relaxed meetup for friends: snacks, music, games and great company. This invite
+                        is mobile-first — RSVP saves locally on your device.</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+                        <a class="btn" href="#rsvp">RSVP Now</a>
+                        <a class="ghost" href="#schedule">View Schedule</a>
+                    </div>
+                </section>
+
+                <div class="grid">
+                    <section>
+                        <article class="card fade-up">
+                            <h3>Event Details</h3>
+                            <p class="muted">Date: <strong>Saturday, Aug 30, 2025</strong> • Venue: <strong
+                                    id="venueName">Secret Test</strong></p>
+                            <p class="small muted">Casual dress. Bring a friend and your best smile. See schedule below
+                                and use the RSVP to let hosts know you’re coming.</p>
+                        </article>
+
+                        <article id="schedule" class="card fade-up" style="margin-top:12px">
+                            <h3>Schedule</h3>
+                            <div class="small muted">(All times local)</div>
+                            <div style="margin-top:12px" class="timeline">
+
+                                <div class="tick">
+                                    <div class="dot" aria-hidden="true"></div>
+                                    <div class="time">3:00 PM — 4:00 PM</div>
+                                    <div class="event">
+                                        <h4>Arrival & Welcome</h4>
+                                        <div class="muted">Warm welcome, light snacks and ice-breakers to get everyone
+                                            comfortable.</div>
+                                    </div>
+                                </div>
+
+                                <div class="tick">
+                                    <div class="dot" aria-hidden="true"></div>
+                                    <div class="time">4:00 PM — 5:00 PM</div>
+                                    <div class="event">
+                                        <h4>Chill & Activities</h4>
+                                        <div class="muted">Relaxed hangout — music, casual games, and good conversation.
+                                            Bring any board/card games if you like.</div>
+                                    </div>
+                                </div>
+
+                                <div class="tick">
+                                    <div class="dot" aria-hidden="true"></div>
+                                    <div class="time">6:00 PM</div>
+                                    <div class="event">
+                                        <h4>Goodbye & Group Photo</h4>
+                                        <div class="muted">Group photo, exchange contacts, say goodbye. Thanks for
+                                            coming!</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <article id="gallery" class="card fade-up" style="margin-top:12px">
+                            <h3>Gallery</h3>
+                            <div class="gallery" id="galleryList">
+                                <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6?w=800&q=60"
+                                    alt="party" />
+                                <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=60"
+                                    alt="friends" />
+                                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=60"
+                                    alt="snacks" />
+                            </div>
+                            <div class="small muted" style="margin-top:8px">Tip: tap images to view larger. Replace
+                                image URLs in the file to use your own photos.</div>
+                        </article>
+
+                        <article class="card fade-up" style="margin-top:12px">
+                            <h3>Location</h3>
+                            <p class="muted">Venue: <strong id="venueText">Secret Test</strong></p>
+                            <div class="map-wrap" style="margin-top:8px">
+                                <!-- Some map services block embedding from app links; provide a clickable button and fallback link -->
+                                <div style="padding:0;">
+                                    <iframe id="mapFrame" title="map"
+                                        src="https://www.google.com/maps?q=dhaka&output=embed"
+                                        style="width:100%;height:260px;border:0"></iframe>
+                                </div>
+                            </div>
+                            <div class="map-actions">
+                                <a id="openMap" class="btn" href="#">Open in Maps</a>
+                                <button id="copyMap" class="ghost">Copy Map Link</button>
+                            </div>
+                            <div class="small muted" style="margin-top:8px">If the embedded map doesn't show, tap
+                                <strong>Open in Maps</strong> to view the location in your maps app.</div>
+                        </article>
+                    </section>
+
+                    <aside>
+                        <div id="rsvp" class="card fade-up">
+                            <h3>RSVP</h3>
+                            <p class="muted">Responses are saved locally on each device (localStorage). No data leaves
+                                your phone unless you share it.</p>
+                            <form id="rsvpForm">
+                                <input id="name" type="text" placeholder="Your full name" required />
+                                <input id="phone" type="tel" placeholder="Phone (optional)" />
+                                <div class="row">
+                                    <select id="coming">
+                                        <option value="yes">I'll come</option>
+                                        <option value="no">Sorry, can't make it</option>
+                                        <option value="maybe">Maybe</option>
+                                    </select>
+                                    <input id="guests" type="number" min="0" placeholder="+ Guests" />
+                                </div>
+                                <textarea id="note" rows="3" placeholder="Say hi or add a note"></textarea>
+                                <button id="saveRsvp" class="btn" type="submit">Save RSVP</button>
+                            </form>
+
+                            <div class="divider"></div>
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                <div style="font-weight:700">Saved responses</div>
+                                <button id="clearRSVP" class="ghost">Clear</button>
+                            </div>
+                            <div id="rsvpList" style="margin-top:10px"></div>
+                        </div>
+
+                        <div class="card fade-up" style="margin-top:12px">
+                            <h4>Share & Save</h4>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+                                <button id="shareBtn" class="btn">Share Invite</button>
+                                <a id="downloadBtn" class="ghost" href="#">Download HTML</a>
+                                <button id="copyBtn" class="ghost">Copy Invite Text</button>
+                            </div>
+                        </div>
+
+                        <div class="card fade-up" style="margin-top:12px">
+                            <h4>Hosts</h4>
+                            <div class="muted">Mahim & friends</div>
+                            <div class="small muted" style="margin-top:8px">Contact: <a
+                                    href="mailto:organizer@example.com"
+                                    style="color:var(--accent)">organizer@example.com</a></div>
+                        </div>
+                    </aside>
+                </div>
+            </main>
+
+            <footer style="margin-top:18px;text-align:center" class="small muted">Made with ♥ — save as
+                <code>index.html</code> and open on your phone. Want me to host it? I can guide you step-by-step.
+            </footer>
+        </div>
+
+        <div class="fab"><button id="floatingShare" class="btn">Share</button></div>
+        <div id="toast" class="toast">Saved ✓</div>
+
+        <script>
+            // ===== Configuration (updateable) =====
+            const MAP_LINK = 'https://maps.app.goo.gl/weKSRBgRPHE3vMh66';
+            const EMBED_MAP = 'https://www.google.com/maps?q=Secret+Test&output=embed'; // fallback embed using query
+
+            // ===== Mobile menu =====
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', () => {
+                    const open = mobileMenu.style.display !== 'none';
+                    mobileMenu.style.display = open ? 'none' : 'block';
+                    mobileToggle.setAttribute('aria-expanded', String(!open));
+                });
+            }
+
+            // ===== RSVP localStorage =====
+            const form = document.getElementById('rsvpForm');
+            const rsvpList = document.getElementById('rsvpList');
+            const clearBtn = document.getElementById('clearRSVP');
+            const toast = document.getElementById('toast');
+
+            function showToast(msg = 'Saved') {
+                toast.textContent = msg; toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 1400);
+            }
+
+            function escapeHTML(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }
+
+            function loadRSVP() {
+                const raw = localStorage.getItem('gt_rsvps');
+                const arr = raw ? JSON.parse(raw) : [];
+                if (arr.length === 0) { rsvpList.innerHTML = '<div class="small muted">No responses yet</div>'; return }
+                rsvpList.innerHTML = '';
+                arr.slice().reverse().forEach(item => {
+                    const el = document.createElement('div');
+                    el.style.padding = '8px'; el.style.borderRadius = '8px'; el.style.background = 'rgba(255,255,255,0.02)'; el.style.marginBottom = '8px';
+                    el.innerHTML = `<div style="font-weight:700">${escapeHTML(item.name || '—')}</div><div class="muted">${escapeHTML(item.status)} • ${escapeHTML(item.guests || '0')} guests</div><div class="small muted">${escapeHTML(item.note || '')}</div>`;
+                    rsvpList.appendChild(el);
+                });
+            }
+
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                const data = {
+                    name: document.getElementById('name').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    status: document.getElementById('coming').value,
+                    guests: document.getElementById('guests').value,
+                    note: document.getElementById('note').value.trim(),
+                    created: Date.now()
+                };
+                if (!data.name) { alert('Please enter your name'); return }
+                const raw = localStorage.getItem('gt_rsvps');
+                const arr = raw ? JSON.parse(raw) : [];
+                arr.push(data);
+                localStorage.setItem('gt_rsvps', JSON.stringify(arr));
+                loadRSVP();
+                form.reset();
+                showToast('RSVP saved');
+            });
+
+            clearBtn.addEventListener('click', () => {
+                if (confirm('Clear all saved RSVPs on this device?')) { localStorage.removeItem('gt_rsvps'); loadRSVP(); showToast('Cleared'); }
+            });
+
+            loadRSVP();
+
+            // ===== Share / Copy / Download =====
+            async function tryShare() {
+                const shareData = { title: document.title, text: `You're invited to Secret Test — open this invite to RSVP!`, url: location.href };
+                try {
+                    if (navigator.share) await navigator.share(shareData);
+                    else { await navigator.clipboard.writeText(location.href); alert('Link copied to clipboard.'); }
+                } catch (err) { console.warn('Share failed', err); try { await navigator.clipboard.writeText(location.href); alert('Link copied to clipboard.'); } catch (e) { alert('Share not supported.'); } }
+            }
+
+            document.getElementById('shareBtn').addEventListener('click', tryShare);
+            document.getElementById('floatingShare').addEventListener('click', tryShare);
+
+            document.getElementById('copyBtn').addEventListener('click', () => {
+                const text = `You're invited to Secret Test!
+Date: Saturday, Aug 30, 2025
+Schedule: 3-4 Arrival & Welcome, 4-5 Chill, 6:00 Goodbye
+Open this invite to RSVP.`;
+                navigator.clipboard.writeText(text).then(() => showToast('Invite text copied'));
+            });
+
+            document.getElementById('downloadBtn').addEventListener('click', e => {
+                e.preventDefault();
+                const html = '<!doctype html>
+                ' + document.documentElement.outerHTML;
+                const blob = new Blob([html], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url; a.download = 'get-together-invite.html'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+            });
+
+            // ===== Map actions =====
+            const openMap = document.getElementById('openMap');
+            const copyMap = document.getElementById('copyMap');
+            const mapFrame = document.getElementById('mapFrame');
+            openMap.addEventListener('click', e => { e.preventDefault(); window.location.href = MAP_LINK; });
+            copyMap.addEventListener('click', () => { navigator.clipboard.writeText(MAP_LINK).then(() => showToast('Map link copied')) });
+            // set embed src to a friendly query (some app links block embedding)
+            mapFrame.src = EMBED_MAP;
+
+            // ===== Small UX: gallery click to open large =====
+            document.querySelectorAll('.gallery img').forEach(img => { img.style.cursor = 'pointer'; img.addEventListener('click', () => window.open(img.src, '_blank')); });
+        </script>
+    </body>
+
+    </html>
+
+</body>
+
+</html>
